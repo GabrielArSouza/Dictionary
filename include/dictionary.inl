@@ -1,5 +1,13 @@
+/**
+ * @file dictionary.inl
+ * @authors Gabriel Araújo de Souza
+ * @date 22 Junho 2017
+ * @brief File for DAL and DSAL classes implementation.
+ */
+
 #include "dictionary.h"
 
+//<! find an element to DAL
 template <typename Key, typename Data, typename KeyComparator>
 int DAL<Key, Data, KeyComparator>::_search ( const Key & _x ) const 
 {
@@ -19,6 +27,7 @@ int DAL<Key, Data, KeyComparator>::_search ( const Key & _x ) const
 	return -1;
 }
 
+//<! remove an element in list 
 template <typename Key, typename Data, typename KeyComparator>
 bool DAL<Key, Data, KeyComparator>::remove ( const Key & _x, Data & _s )
 {
@@ -47,7 +56,7 @@ bool DAL<Key, Data, KeyComparator>::remove ( const Key & _x, Data & _s )
 		return false;
 } 
 
-//<! searchs an element in list
+//<! search an element in the list
 template <typename Key, typename Data, typename KeyComparator>
 bool DAL<Key, Data, KeyComparator>::search ( const Key & _x, Data & _s ) const
 {
@@ -63,7 +72,7 @@ bool DAL<Key, Data, KeyComparator>::search ( const Key & _x, Data & _s ) const
 		return false;
 }
 
-//<! insert an new element in list
+//<! insert a new element in the list
 template <typename Key, typename Data, typename KeyComparator>
 bool DAL<Key, Data, KeyComparator>::insert ( const Key & _newKey , const Data & _newInfo )
 {
@@ -124,34 +133,34 @@ template <typename Key, typename Data, typename KeyComparator>
 bool DAL<Key, Data, KeyComparator>::sucessor ( const Key & _x , Key & _y ) const
 {
 	if ( m_length == 0 ) return false;
+	if ( _search( _x ) == -1 ) return false;
 
 	//<! Comparison function
 	KeyComparator comp;
 	Key successor = max();
 	Key aux;
 	
+
 	for ( auto i(0); i < m_length; ++i )
 	{
 		aux = m_data[i].id;
 		if ( comp(_x, aux ) and ( comp(aux, successor) )) successor = aux; 
 	}
 
-	//<! successor == max()
-	auto sucM = (!comp(successor, max()) and !comp(max(), successor));
-
-	//<! successor == _x
-	auto sucX = (!comp(successor, _x) and !comp(_x, successor));
-
-	if ( sucM or sucX ) return false;
-	else _y = successor;
+	if ( !comp(successor, _x) and !comp(_x, successor)  ) return false;
+	else
+		_y = successor;
+	
 
 	return true;	
 }
 
+//<! search predecessor
 template <typename Key, typename Data, typename KeyComparator>
 bool DAL<Key, Data, KeyComparator>::predecessor ( const Key & _x , Key & _y ) const 
 {
 	if ( m_length == 0 ) return false;
+	if ( _search( _x ) == -1 ) return false;
 
 	//<! Comparison function
 	KeyComparator comp;
@@ -164,15 +173,10 @@ bool DAL<Key, Data, KeyComparator>::predecessor ( const Key & _x , Key & _y ) co
 		if ( comp(aux, _x ) and ( comp(predecessor,aux ) )) predecessor = aux; 
 	}
 
-	//<! predecessor == min()
-	auto preM = (!comp(predecessor, min()) and !comp(min(), predecessor));
-
-	//<! predecessor == _x
-	auto preX = (!comp(predecessor, _x) and !comp(_x, predecessor));
-
-	if ( preM or preX ) return false;
-	else _y = predecessor;
-
+	if ( !comp(predecessor, _x) and !comp(_x, predecessor) ) return false;
+	else
+		_y = predecessor;
+	
 	return true;	
 }
 
@@ -181,6 +185,7 @@ bool DAL<Key, Data, KeyComparator>::predecessor ( const Key & _x , Key & _y ) co
  ***********************
  */
 
+//<! find an element to DAL
 template <typename Key, typename Data, typename KeyComparator>
 int DSAL<Key, Data, KeyComparator>::_search ( const Key & _x ) const
 {
@@ -201,6 +206,7 @@ int DSAL<Key, Data, KeyComparator>::_search ( const Key & _x ) const
 	return -1;
 }
 
+//<! remove an element in the list
 template <typename Key, typename Data, typename KeyComparator>
 bool DSAL<Key, Data, KeyComparator>::remove ( const Key & _x, Data & _s )
 {
@@ -233,6 +239,7 @@ bool DSAL<Key, Data, KeyComparator>::remove ( const Key & _x, Data & _s )
 	return false;
 } 
 
+//<! insert a new element in the list
 template <typename Key, typename Data, typename KeyComparator>
 bool DSAL<Key, Data, KeyComparator>::insert ( const Key & _newKey , const Data & _newInfo )
 {
@@ -297,6 +304,7 @@ bool DSAL<Key, Data, KeyComparator>::insert ( const Key & _newKey , const Data &
 	return false;
 }
 
+//<! search the minimal element in the list
 template <typename Key, typename Data, typename KeyComparator>
 Key DSAL<Key, Data, KeyComparator>::min ( ) const
 {
@@ -309,6 +317,7 @@ Key DSAL<Key, Data, KeyComparator>::min ( ) const
 	return data[0].id;
 }
 
+//<! search the minimal element in the list
 template <typename Key, typename Data, typename KeyComparator>
 Key DSAL<Key, Data, KeyComparator>::max ( ) const 
 {
@@ -321,6 +330,7 @@ Key DSAL<Key, Data, KeyComparator>::max ( ) const
 	return data[length-1].id;
 }
 
+//<! search successor
 template <typename Key, typename Data, typename KeyComparator>
 bool DSAL<Key, Data, KeyComparator>::sucessor ( const Key & _x , Key & _y ) const
 {
@@ -328,12 +338,14 @@ bool DSAL<Key, Data, KeyComparator>::sucessor ( const Key & _x , Key & _y ) cons
 	auto &length = DAL<Key, Data, KeyComparator>::m_length;
 
 	auto pos = _search(_x);
+	if (  pos == -1 ) return false;
 	if ( length == 0 or pos == length-1) return false;
 
 	_y = data[pos+1].id;
 	return true;
 }
 
+//<! search predecessor
 template <typename Key, typename Data, typename KeyComparator>
 bool DSAL<Key, Data, KeyComparator>::predecessor ( const Key & _x , Key & _y ) const
 {
@@ -341,6 +353,7 @@ bool DSAL<Key, Data, KeyComparator>::predecessor ( const Key & _x , Key & _y ) c
 	auto &length = DAL<Key, Data, KeyComparator>::m_length;
 
 	auto pos = _search(_x);
+	if (  pos == -1 or pos == 0) return false;
 	if ( length == 0 ) return false;
 
 	_y = data[pos-1].id;

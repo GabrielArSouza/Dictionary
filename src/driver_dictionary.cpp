@@ -1,7 +1,17 @@
+/**
+ * @file driver_dictionary.cpp
+ * @authors Gabriel Araújo de Souza
+ * @date 22 Junho 2017
+ * @brief File for DAL and DSAL classes tests .
+ */
+
 #include <iostream>
 #include <cassert>
 #include "dictionary.h"
 
+/**
+ * @brief      Class for my key comparator.
+ */
 class MyKeyComparator 
 {
 	
@@ -121,7 +131,33 @@ int main ()
 		assert( one.sucessor(2014065190, succ) == false );
 
 		//<! The successor to a non-existing key
-		assert( test2.sucessor( 12, succ ) == false );
+		assert( test.sucessor( 12, succ ) == false );
+
+		std::cout << "Testar o predecessor: \n";
+		std::cout <<test;
+
+		// //<! testing predecessor
+		int pred;
+		assert( test.predecessor(2016042088, pred));
+		assert( pred == 2014065190 );
+
+		//<! The smallest's predecessor
+		auto aux2 = test.min();
+		assert( test.predecessor(aux2, pred) == false);
+		
+		// //<! The Largest's predecessor
+		aux2 = test.max();
+		assert( test.predecessor(aux2, pred));
+		assert( pred == 2016042100 );
+
+		// //<! Predecessor in empty list
+		assert( test2.predecessor(aux2, pred) == false );
+
+		//<! Predecessor in list with single element
+		assert( one.predecessor(2014065190, pred) == false );
+
+		// //<! The predecessor to a non-existing key
+		assert( test.sucessor( 12,  pred) == false );
 	}
 
 	//<! Testes DSLA
@@ -170,8 +206,6 @@ int main ()
 		assert(test.insert( 2016042088, "Gabriel"));
 		assert(test.insert( 2005119812, "Suplente"));
 
-		std::cout << std::endl;
-		std::cout << test;	
 		//<! testing the min
 		assert( test.min() == 2005119812 );
 		//<! test2.min(); std::out_of_range
@@ -184,8 +218,7 @@ int main ()
 		assert( test.search( 2017000111, nome ));
 		assert( nome == "Joseph" );
 
-		std::cout << ">>DSLA<<\n";
-		std::cout << test;
+		std::cout << ">>DSLA	<<\n";
 		
 		//<! testing the remove
 		//<! remove in the end
@@ -221,9 +254,7 @@ int main ()
 		assert( test.insert( 2016042090, "Gustavo"));
 		assert( test.insert( 2016042100, "Maria"));
 		assert( test.insert( 2016042101, "Joao"));
-
-		std::cout << std::endl;
-		std::cout << test;
+;
 		//<! successor in the middle.
 		int succ;
 		assert( test.sucessor(2016042088, succ));
@@ -234,10 +265,8 @@ int main ()
 		assert( test.sucessor(aux, succ) );
 		assert( succ == 2016042088 );
 
-		std::cout << std::endl;
-		std::cout << test;
 		//<! The Largest's successor
-		aux = test.max();
+		aux = test.max();	
 		assert( test.sucessor(aux, succ) == false );
 
 		//<! Successor in empty list
@@ -248,6 +277,29 @@ int main ()
 
 		//<! The successor to a non-existing key
 		assert( test2.sucessor( 12, succ ) == false );
+
+		// //<! testing predecessor
+		int pred;
+		assert( test.predecessor(2016042088, pred));
+		assert( pred == 2014065190 );
+
+		//<! The smallest's predecessor
+		auto aux2 = test.min();
+		assert( test.predecessor(aux2, pred) == false);
+		
+		//<! The Largest's predecessor
+		aux2 = test.max();
+		assert( test.predecessor(aux2, pred));
+		assert( pred == 2016042100 );
+
+		// //<! Predecessor in empty list
+		assert( test2.predecessor(aux2, pred) == false );
+
+		//<! Predecessor in list with single element
+		assert( one.predecessor(2014065190, pred) == false );
+
+		// //<! The predecessor to a non-existing key
+		assert( test.sucessor( 12, pred ) == false );
 	}
 	
 	std::cout << "\n>>> Passou em todos os teste\n";

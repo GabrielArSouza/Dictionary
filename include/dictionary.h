@@ -1,3 +1,10 @@
+/**
+ * @file dictionary.h
+ * @authors Gabriel Araújo de Souza
+ * @date 22 Junho 2017
+ * @brief File for DAL and DSAL classes definitions.
+ */
+
 #ifndef _DIC_H_
 #define _DIC_H_
 
@@ -5,7 +12,13 @@
 #include <sstream>
 #include <algorithm>
 
-
+/**
+ * @brief      Class for dal.
+ *
+ * @tparam     Key            key type 
+ * @tparam     Data           data type elements
+ * @tparam     KeyComparator  function for compare keys
+ */
 template <typename Key, typename Data, typename KeyComparator >
 class DAL
 {
@@ -144,6 +157,13 @@ public:
 
 };
 
+/**
+ * @brief      Class for dsal.
+ *
+ * @tparam     Key            key type 
+ * @tparam     Data           data type elements
+ * @tparam     KeyComparator  function for compare keys
+ */
 template <typename Key, typename Data, typename KeyComparator >
 class DSAL: public DAL<Key, Data, KeyComparator >
 {
